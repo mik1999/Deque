@@ -4,6 +4,8 @@
 #include "deque\deque.h"
 #include <fstream>
 #include <iostream>
+#include <time.h>
+#include <cmath>
 TEST(TestCaseName, TestName) {
   EXPECT_EQ(1, 1);
   EXPECT_TRUE(true);
@@ -13,40 +15,47 @@ template <typename T>
 bool eqDeque(const Deque <T>& d1, const std::deque <T>& d2) {
 	if (d1.size() != d2.size())
 		return false;
-	for (int i = 0; i < (int)d1.size(); i++)
+	for (size_t i = 0; i < d1.size(); i++)
 		if (d1[i] != d2[i])
 			return false;
 	return true;
 }
-
-const int MAX_SIZE = 1000000;
+enum InteractiveTestCase {
+	ITpush_front,
+	ITpush_back,
+	ITpop_back,
+	ITpop_front,
+	ITsize
+};
+const int MAX_SIZE = 10000000;
 void InteractiveTest(long long temps, bool eqflag) {
 	Deque <int> q1;
 	std::deque <int> q2;
 	for (long long i = 0; i < temps; i++) {
-		int j = rand() % 4, k;
-		switch (j) {
-		case 0:
+		int k;
+		int Case = rand() % ITsize;
+		switch (Case) {
+		case ITpush_front:
 			if (q2.size() > MAX_SIZE)
 				break;
 			k = rand();
 			q1.push_front(k);
 			q2.push_front(k);
 			break;
-		case 1:
+		case ITpush_back:
 			k = rand();
 			if (q2.size() > MAX_SIZE)
 				break;
 			q1.push_back(k);
 			q2.push_back(k);
 			break;
-		case 2:
+		case ITpop_back:
 			if (q2.empty())
 				break;
 			q2.pop_back();
 			q1.pop_back();
 			break;
-		case 3:
+		case ITpop_front:
 			if (q2.empty())
 				break;
 			q2.pop_front();
@@ -166,4 +175,50 @@ TEST(CONSTRUCTOR, Test1) {
 	std::deque <std::string> d222(d22);
 	ASSERT_EQ((d1.begin())->size(), (d2.begin())->size());
 	ASSERT_TRUE(eqDeque(d111, d222)) << "ERROR___operator=___ERROR";
+}
+void somePush(Deque <double>& d) {
+	if (d.size() == MAX_SIZE)
+		return;
+	if (rand() % 2)
+		d.push_back(rand() * 1.0 / (rand() + 1));
+	else
+		d.push_front(rand() * 1.0 / (rand() + 1));
+}
+void somePop(Deque <double>& d) {
+	if (d.empty())
+		return;
+	if (rand() % 2)
+		d.pop_back();
+	else
+		d.pop_front();
+}
+
+void InteractiveTest2(int numOfTemps) {
+	int tbegin = clock();
+	long long numOfOper = 2, sumOfOper = 0;
+	Deque <double> d;
+	for (long long i = 1; i <= numOfTemps; i++) {
+		for (int j = 0; j < numOfOper; j++) {
+			if (rand() % 10)
+				somePop(d);
+			else
+				somePush(d);
+		}
+		for (int j = 0; j < numOfOper; j++) {
+			if (rand() % 10)
+				somePush(d);
+			else
+				somePop(d);
+		}
+		sumOfOper += 2 * numOfOper;
+		numOfOper *= 2;
+		std::ofstream out("C:/myFavoriteUniversity/myFavoriteSubject/GtestOut.txt", std::ios::in);
+		out.seekp(0, std::ios::end);
+		out << "Test number " << i << ". " << numOfOper <<
+		" operations done. It took " << (clock() - tbegin) / CLOCKS_PER_SEC << " seconds.\n";
+		out.close();
+	}
+}
+TEST(TestTime, MainTest) {
+	InteractiveTest2(30);
 }

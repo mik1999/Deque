@@ -11,81 +11,94 @@ typedef size_t myPtrdiff_t;
 template <typename T>
 class Vector {
 private:
-	static const double Exp;
-	static const size_t MinSize;
+	static const double Exp_;
+	static const size_t MinSize_;
 	size_t size_, realSize_;
 	T* elements_;
-	void renew();
-	void setNewSize(size_t newSize);
+	void renew_();
+	void setNewSize_(size_t newSize);
 public:
-	Vector() {
-		realSize_ = MinSize;
-		elements_ = new T[MinSize];
-		size_ = 0;
-	}
-	Vector(const Vector & v){
-		realSize_ = v.realSize_;
-		size_ = v.size_;
-		elements_ = new T[realSize_];
-		std::copy(v.elements_, v.elements_ + size_, elements_);
-		//for (size_t i = 0; i < size_; i++)
-		//	elements_[i] = v.elements_[i];
-	}
-	~Vector() {
-		delete[] elements_;
-	}
-	Vector& operator=(Vector v) {
-		delete[] elements_;
-		realSize_ = v.realSize_;
-		size_ = v.size_;
-		elements_ = new T[realSize_];
-		std::copy(v.elements_, v.elements_ + size_, elements_);
-		return *this;
-	}
+	Vector();
+	Vector(const Vector & v);
+	~Vector();
+	Vector& operator=(Vector v);
 	void push_back(const T& key);
 	void pop_back();
 	void resize(const size_t &newSize);
-	T at(const size_t& index) const;
+	const T& at(const size_t& index) const;
+	T& get(const size_t& index) const;
 	T& operator [](const size_t& index);
-	T operator [](const size_t& index) const;
+	const T& operator [](const size_t& index) const;
 	void leftShift(const size_t &num);
 	T& back();
-	T back() const;
-	size_t size() const{
-		return size_;
-	}
-	size_t realSize() {
-		return realSize_;
-	}
-	bool empty() const{
-		return !size_;
-	}
-	void clear() {
-		resize(0);
-	}
+	const T& back() const;
+	size_t size() const;
+	size_t realSize();
+	bool empty() const;
+	void clear();
 };
 template <typename T>
-const double Vector <T>::Exp = 2;
+Vector <T>::Vector() {
+	realSize_ = MinSize_;
+	elements_ = new T[MinSize_];
+	size_ = 0;
+}
 template <typename T>
-const size_t Vector <T>::MinSize = 1; 
+Vector <T>::Vector(const Vector & v) {
+	realSize_ = v.realSize_;
+	size_ = v.size_;
+	elements_ = new T[realSize_];
+	std::copy(v.elements_, v.elements_ + size_, elements_);
+}
 template <typename T>
-void Vector <T>::renew() {
+Vector <T>::~Vector() {
+	delete[] elements_;
+}
+template <typename T>
+Vector<T>& Vector <T>::operator=(Vector <T> v) {
+	delete[] elements_;
+	realSize_ = v.realSize_;
+	size_ = v.size_;
+	elements_ = new T[realSize_];
+	std::copy(v.elements_, v.elements_ + size_, elements_);
+	return *this;
+}
+template <typename T>
+size_t Vector <T>::size() const {
+	return size_;
+}
+template <typename T>
+size_t Vector <T>::realSize() {
+	return realSize_;
+}
+template <typename T>
+bool Vector <T>::empty() const {
+	return !size_;
+}
+template <typename T>
+void Vector <T>::clear() {
+	resize(0);
+}
+template <typename T>
+const double Vector <T>::Exp_ = 2;
+template <typename T>
+const size_t Vector <T>::MinSize_ = 4; 
+template <typename T>
+void Vector <T>::renew_() {
 	if (size_ == realSize_)
-		setNewSize(size_t(size_ * Exp));
-	if (size_ * (Exp * 2 + 1) <= realSize_)
-		setNewSize(size_t(size_ * Exp));
+		setNewSize_(size_t(size_ * Exp_));
+	if (size_ * (Exp_ * 2 + 1) <= realSize_)
+		setNewSize_(size_t(size_ * Exp_));
 }
 
 template <typename T>
-void Vector <T>::setNewSize(size_t newSize) {
-	if (newSize < MinSize)
-		newSize = MinSize;
+void Vector <T>::setNewSize_(size_t newSize) {
+	if (newSize < MinSize_)
+		newSize = MinSize_;
 	if (realSize_ == newSize)
 		return;
 	T* newElements = new T[newSize];
-	//std::copy (elements_, elements_ + size_, newElements);
-	for (int i = 0; i < (int)size_; i++)
-		newElements[i] = elements_[i];
+	std::copy (elements_, elements_ + size_, newElements);
 	delete[] elements_;
 	elements_ = newElements;
 	realSize_ = newSize;
@@ -95,16 +108,16 @@ template <typename T>
 void Vector <T>::push_back(const T& key) {
 	elements_[size_] = key;
 	size_++;
-	renew();
+	renew_();
 }
 template <typename T>
 void Vector <T>::pop_back() {
 	assert(size_ > 0);
 	size_--;
-	renew();
+	renew_();
 }
 template <typename T>
-T Vector <T>::back() const {
+const T& Vector <T>::back() const {
 	assert(!empty());
 	return at(size_ - 1);
 }
@@ -114,25 +127,28 @@ T& Vector <T>::back(){
 	return elements_[size_ - 1];
 }
 template <typename T>
-T Vector <T>::at(const size_t &index) const{
+const T& Vector <T>::at(const size_t &index) const{
+	assert(index >= 0 && index < size_);
+	return elements_[index];
+}
+template <typename T>
+T& Vector <T>::get(const size_t &index) const{
 	assert(index >= 0 && index < size_);
 	return elements_[index];
 }
 template <typename T>
 T& Vector <T>::operator [](const size_t &index) {
-	assert(index >= 0 && index < size_);
-	return elements_[index];
+	return get(index);
 }
 template <typename T>
-T Vector <T>::operator [](const size_t &index) const{
-	assert(index >= 0 && index < size_);
-	return elements_[index];
+const T& Vector <T>::operator [](const size_t &index) const{
+	return get(index);
 }
 template <typename T>
 void Vector <T>::resize(const size_t &newSize) {
 	if (newSize < size_) {
 		size_ = newSize;
-		renew();
+		renew_();
 	}
 	else {
 		for (; size_ < newSize;)
@@ -142,15 +158,15 @@ void Vector <T>::resize(const size_t &newSize) {
 template <typename T>
 void Vector <T>::leftShift(const size_t &num) {
 	assert(num <= size_);
-	for (int i = 0; i < int(size_ - num); i++)
-		elements_[i] = elements_[i + num];
+	std::copy(elements_ + num, elements_ + size_, elements_);
 	resize(size_ - num);
 }
 template <typename T>
 class Deque {
 private:
 	Vector <T> vBegin_, vEnd_;
-	void align();
+	void align_();
+	T& get_(const size_t& index) const;
 	template <class ItDeque, class ItT, class ItRef>
 	class OwnIterator : public std::iterator <std::random_access_iterator_tag, ItT, myPtrdiff_t, ItT*, ItRef> {
 	private:
@@ -238,33 +254,19 @@ public:
 	Deque() {}
 	~Deque() {}
 	Deque(const Deque& q): vBegin_(q.vBegin_), vEnd_(q.vEnd_){}
-	Deque& operator =(const Deque& q) {
-		if (this == &q)
-			return *this;
-		vBegin_ = q.vBegin_;
-		vEnd_ = q.vEnd_;
-		return *this;
-	}
-	void push_front(const T& key) {
-		vEnd_.push_back(key);
-	}
-	void push_back(const T& key) {
-		vBegin_.push_back(key);
-	}
+	Deque& operator =(const Deque& q);
+	void push_front(const T& key);
+	void push_back(const T& key);
+	size_t size() const;
+	bool empty() const;
 	void pop_back();
 	void pop_front();
 	T& back();
-	T back() const;
+	const T& back() const;
 	T& front();
-	T front() const;
-	T operator [](const size_t& index) const;
+	const T& front() const;
+	const T& operator [](const size_t& index) const;
 	T& operator [](const size_t& index);
-	size_t size() const{
-		return vBegin_.size() + vEnd_.size();
-	}
-	bool empty() const{
-		return vBegin_.empty() && vEnd_.empty();
-	}
 	typedef OwnIterator<Deque, T, T&> iterator;
 	typedef OwnIterator<const Deque, T, T> const_iterator;
 	typedef std::reverse_iterator <typename Deque::iterator> reverse_iterator;
@@ -333,24 +335,50 @@ public:
 	}*/
 };
 template <typename T>
-void Deque <T>::align() {
+Deque<T>& Deque<T>::operator =(const Deque<T>& q) {
+	if (this == &q)
+		return *this;
+	vBegin_ = q.vBegin_;
+	vEnd_ = q.vEnd_;
+	return *this;
+}
+template <typename T>
+void Deque<T>::push_front(const T& key) {
+	vEnd_.push_back(key);
+}
+template <typename T>
+void Deque<T>::push_back(const T& key) {
+	vBegin_.push_back(key);
+}
+template <typename T>
+size_t Deque<T>::size() const {
+	return vBegin_.size() + vEnd_.size();
+}
+template <typename T>
+bool Deque<T>::empty() const {
+	return vBegin_.empty() && vEnd_.empty();
+}
+template <typename T>
+void moveElements(Vector <T>& from, Vector <T>& to, int numOfElements) {
+	for (int i = numOfElements - 1; i >= 0; i--)
+		to.push_back(from.at(i));
+	from.leftShift(numOfElements);
+
+}
+template <typename T>
+void Deque <T>::align_() {
 	if (vEnd_.empty()) {
 		if (vBegin_.empty())
 			return;
-		for (int i = vBegin_.size() / 2 - 1; i >= 0; i--)
-			vEnd_.push_back(vBegin_.at(i));
-		vBegin_.leftShift(vBegin_.size() / 2);
+		moveElements(vBegin_, vEnd_, vBegin_.size() / 2);
 	}
-	if (vBegin_.empty()) {
-		for (int i = (vEnd_.size() + 1) / 2 - 1; i >= 0; i--)
-			vBegin_.push_back(vEnd_.at(i));
-		vEnd_.leftShift((vEnd_.size() + 1) / 2);
-	}
+	if (vBegin_.empty())
+		moveElements(vEnd_, vBegin_, (vEnd_.size() + 1) / 2);
 }
 template <typename T>
 void Deque <T>::pop_front() {
 	assert(!empty());
-	align();
+	align_();
 	if (vEnd_.empty())
 		vBegin_.pop_back();
 	else
@@ -359,7 +387,7 @@ void Deque <T>::pop_front() {
 template <typename T>
 void Deque <T>::pop_back() {
 	assert(!empty());
-	align();
+	align_();
 	vBegin_.pop_back();
 }
 template <typename T>
@@ -370,7 +398,7 @@ T& Deque <T>::front() {
 	return vEnd_.back();
 }
 template <typename T>
-T Deque <T>::front() const{
+const T& Deque <T>::front() const{
 	assert(!empty());
 	if (vEnd_.empty())
 		return vBegin_[0];
@@ -384,25 +412,27 @@ T& Deque <T>::back() {
 	return vBegin_.back();
 }
 template <typename T>
-T Deque <T>::back() const{
+const T& Deque <T>::back() const{
 	assert(!empty());
 	if (vBegin_.empty())
 		return vEnd_[0];
 	return vBegin_.back();
 }
 template <typename T>
-T& Deque <T>::operator[](const size_t& index){
+T& Deque <T>::get_(const size_t& index) const {
 	assert(index < size());
 	if (index < vEnd_.size())
-		return vEnd_[vEnd_.size() - index - 1];
-	return vBegin_[index - vEnd_.size()];
+		return vEnd_.get(vEnd_.size() - index - 1);
+	return vBegin_.get(index - vEnd_.size());
+}
+
+template <typename T>
+T& Deque <T>::operator[](const size_t& index){
+	return get_(index);
 }
 template <typename T>
-T Deque <T>::operator[](const size_t& index) const {
-	assert(index < size());
-	if (index < vEnd_.size())
-		return vEnd_[vEnd_.size() - index - 1];
-	return vBegin_[index - vEnd_.size()];
+const T& Deque <T>::operator[](const size_t& index) const {
+	return get_(index);
 }
 
 #endif

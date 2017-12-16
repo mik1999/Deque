@@ -6,21 +6,22 @@
     <TestDuration Test="MyTestCase1.Test1" Duration="1" />
     <TestDuration Test="DequeTest.Test1" Duration="1" />
     <TestDuration Test="DequeTest.Test2" Duration="1" />
-    <TestDuration Test="DequeTest.Test3" Duration="4" />
-    <TestDuration Test="DequeTest.Test4" Duration="20" />
-    <TestDuration Test="DequeTest.Test5" Duration="151" />
-    <TestDuration Test="DequeTest.Test6" Duration="1449" />
-    <TestDuration Test="DequeTest.Test7" Duration="13997" />
+    <TestDuration Test="DequeTest.Test3" Duration="6" />
+    <TestDuration Test="DequeTest.Test4" Duration="17" />
+    <TestDuration Test="DequeTest.Test5" Duration="153" />
+    <TestDuration Test="DequeTest.Test6" Duration="1487" />
+    <TestDuration Test="DequeTest.Test7" Duration="14932" />
     <TestDuration Test="DequeTest.Test8" Duration="143582" />
     <TestDuration Test="IteratorTest.Test1" Duration="1" />
     <TestDuration Test="IteratorTest.Test2" Duration="1" />
     <TestDuration Test="IteratorTest.Test3" Duration="1" />
-    <TestDuration Test="IteratorTest.Test4" Duration="5" />
-    <TestDuration Test="IteratorTest.Test5" Duration="48" />
-    <TestDuration Test="IteratorTest.Test6" Duration="413" />
+    <TestDuration Test="IteratorTest.Test4" Duration="8" />
+    <TestDuration Test="IteratorTest.Test5" Duration="49" />
+    <TestDuration Test="IteratorTest.Test6" Duration="438" />
     <TestDuration Test="ReverseIteratorTest.Test1" Duration="1" />
-    <TestDuration Test="ReverseIteratorTest.Test2" Duration="68" />
+    <TestDuration Test="ReverseIteratorTest.Test2" Duration="71" />
     <TestDuration Test="DequeTest.DISADLED_" Duration="144808" />
-    <TestDuration Test="CONSTRUCTOR.Test1" Duration="23" />
+    <TestDuration Test="CONSTRUCTOR.Test1" Duration="19" />
+    <TestDuration Test="TestTime.MainTest" Duration="226376" />
   </TestDurations>
 </GtaTestDurations>
