@@ -1,0 +1,8 @@
+﻿  test.cpp
+test.cpp(16): warning C4018: <: несоответствие типов со знаком и без знака
+  test.cpp(64): note: выполняется компиляция ссылки на экземпляр шаблон функции "bool eqDeque<int>(const Deque<int> &,const std::deque<int,std::allocator<_Ty>> &)"
+          with
+          [
+              _Ty=int
+          ]
+  GTest1.vcxproj -> C:\МФТИ\programs\HomeWork4\deque\Release\GTest1.exe

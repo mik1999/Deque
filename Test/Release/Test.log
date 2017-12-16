@@ -1,0 +1,2 @@
+﻿  Source.cpp
+C:\МФТИ\programs\googletest-master\googlemock\include\gmock/internal/gmock-port.h(53): fatal error C1083: Не удается открыть файл включение: gtest/internal/gtest-linked_ptr.h: No such file or directory,
